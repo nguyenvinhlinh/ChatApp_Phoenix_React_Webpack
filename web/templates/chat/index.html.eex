@@ -1,1 +1,19 @@
-Hello, this is chat
+<div class="row" style="padding: 10px;">
+  <div id="chat_box" class="col-md-8 col-md-offset-2">
+    <div id="message">
+      <p><b>Linh:</b> Hello Son</p>
+      <p><b>Son:</b> Hello Linh</p>
+    </div>
+    <div id="input_message">
+      <div class="input-group">
+        <span class="input-group-addon">User</span>
+        <input type="text" class="form-control" placeholder="username" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">Message</span>
+        <input type="text" class="form-control" placeholder="message" aria-describedby="basic-addon1">
+      </div>
+    </div>
+  </div>
+</div>
+<script src="<%= static_path(@conn, "/js/chat.js") %>"></script>
