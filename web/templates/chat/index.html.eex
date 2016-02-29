@@ -1,6 +1,6 @@
-<div class="row" style="padding: 10px;">
-  <div id="chat_box" class="col-md-8 col-md-offset-2">
-    <div id="message">
+<div class="row" style="padding: 10px;" id="chatbox-container">
+  <div id="chatbox" class="col-md-8 col-md-offset-2">
+    <div id="message-container">
       <p><b>Linh:</b> Hello Son</p>
       <p><b>Son:</b> Hello Linh</p>
     </div>

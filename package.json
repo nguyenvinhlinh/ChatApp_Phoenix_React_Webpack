@@ -1,11 +1,17 @@
 {
-  "repository": {
-  },
+  "repository": {},
   "dependencies": {
     "webpack": "1.12.14",
     "jquery": "2.2.1",
     "bootstrap": "3.3.6",
+    "react": "0.14.7",
+    "react-dom": "0.14.7",
+    "babel-core": "6.5.2",
+    "babel-loader": "6.2.4",
     "phoenix": "file:deps/phoenix",
     "phoenix_html": "file:deps/phoenix_html"
+  },
+  "devDependencies": {
+    "babel-preset-react": "^6.5.0"
   }
 }
