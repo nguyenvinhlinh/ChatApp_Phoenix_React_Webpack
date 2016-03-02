@@ -17,3 +17,5 @@
   </div>
 </div>
 <script src="<%= static_path(@conn, "/js/chat.js") %>"></script>
+
+<%= raw(ChatApp.ChatView.render_private_script()) %>
