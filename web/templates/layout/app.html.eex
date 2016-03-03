@@ -13,6 +13,14 @@
   
   <body>
     <div class="container">
+      <nav class="navbar navbar-default">
+        <a class="navbar-brand" href="#">ChatApp</a>
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="<%= chat_path(@conn, :index) %>">Chat</a>
+          </li>          
+        </ul>
+      </nav>
       
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
