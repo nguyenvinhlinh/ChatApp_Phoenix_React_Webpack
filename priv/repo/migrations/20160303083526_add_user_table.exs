@@ -2,7 +2,7 @@ defmodule ChatApp.Repo.Migrations.AddUserTable do
   use Ecto.Migration
 
   def up do
-    create table(:user) do
+    create table(:users) do
       add(:username, :string, size: 25)
       add(:encrypted_password, :string)
       timestamps
@@ -10,6 +10,6 @@ defmodule ChatApp.Repo.Migrations.AddUserTable do
   end
 
   def down do
-    drop table(:user)
+    drop table(:users)
   end
 end
