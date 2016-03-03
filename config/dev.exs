@@ -35,8 +35,9 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :chat_app, ChatApp.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "nguyenvinhlinh",
+  password: "nguyenvinhlinh",
   database: "chat_app_dev",
   hostname: "localhost",
+  port: 15432,
   pool_size: 10
