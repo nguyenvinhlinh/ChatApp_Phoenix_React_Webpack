@@ -5,7 +5,7 @@ defmodule ChatApp.User do
     field :username, :string
     field :password, :string, virtual: true
     field :encrypted_password, :string
-
+    field :remember_me_token, :string
     timestamps
   end
 

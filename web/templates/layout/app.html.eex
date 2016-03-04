@@ -45,7 +45,7 @@
                     <li><a href="<%= session_path(@conn, :new) %>">Login</a></li>
                     <li><a href="<%= user_path(@conn, :new) %>">Sign-up</a></li>
                   <% else %>
-                    <li><%= link("Sign-out", to: session_path(@conn, :delete, 1), method: "delete") %></li>
+                    <li><%= link("Sign-out", to: session_path(@conn, :delete, 1), method: "delete", form: []) %></li>
                   <% end %>
                 </ul>
               </li>
