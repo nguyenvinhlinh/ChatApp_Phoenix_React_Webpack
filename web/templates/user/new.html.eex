@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <%= form_for @changeset, user_path(@conn, :create), fn form -> %>
+      <div class="form-group">
+        <label>Username: </label>
+        <%= text_input(form, :username, [class: "form-control", placeholder: "username"]) %>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <%= password_input(form, :password, [class: "form-control"]) %>
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    <% end %>
+  </div>
+</div>
+
