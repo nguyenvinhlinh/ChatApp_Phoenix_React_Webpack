@@ -23,5 +23,7 @@ defmodule ChatApp.SessionController do
 
   def delete(conn, _args) do
     conn
+    |> delete_session(:user_id)
+    |> redirect(to: page_path(conn, :index))
   end
 end
