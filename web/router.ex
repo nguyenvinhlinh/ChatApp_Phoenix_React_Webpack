@@ -18,6 +18,7 @@ defmodule ChatApp.Router do
     get "/", PageController, :index
     get "/chat", ChatController, :index
     resources("/users/", UserController, except: [:delete, :index])
+    resources("/session/", SessionController, only: [:new, :create, :delete])
   end
 
   # Other scopes may use custom stacks.
