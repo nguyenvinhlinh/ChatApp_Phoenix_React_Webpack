@@ -28,7 +28,5 @@
   <div class="col-md-3" id="chatbox-user-table"></div>
 </div>
 
-<%= raw(render_existing(@view_module, "user_chatting_info.js",
-  [username: @conn.assigns.current_user.username,
-   chat_token: @conn.assigns.current_user.chat_token]))%>
+<%= raw(render_existing(@view_module, "user_chatting_info.js", [conn: @conn]))%>
 <script src="<%= static_path(@conn, "/js/chat.js") %>"></script>

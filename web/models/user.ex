@@ -1,6 +1,6 @@
 defmodule ChatApp.User do
   use ChatApp.Web, :model
-
+  alias ChatApp.Utilities
   schema "users" do
     field :username, :string
     field :password, :string, virtual: true
@@ -19,6 +19,7 @@ defmodule ChatApp.User do
     |> validate_length(:username, [min: 5, max: 25])
     |> validate_length(:password, [min: 5, max: 25])
     |> hash_model_password
+    |> put_change(:chat_token, Utilities.generate_random_token(64))
     |> unique_constraint(:username)
   end
 

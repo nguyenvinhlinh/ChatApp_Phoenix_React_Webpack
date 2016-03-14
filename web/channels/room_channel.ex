@@ -9,8 +9,8 @@ defmodule ChatApp.RoomChannel do
     {:error, %{reason: "invalid room"}}
   end
 
-  def handle_in("new_message_event", %{"user" => user, "message" => message}, socket) do
-    broadcast(socket, "new_message_event", %{"user" => user, "message" => message})
+  def handle_in("new_message_event", %{"message" => message}, socket) do
+    broadcast(socket, "new_message_event", %{"user" => socket.assigns.current_user.username, "message" => message})
     {:noreply, socket}
   end
 end

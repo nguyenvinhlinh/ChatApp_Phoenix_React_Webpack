@@ -66,6 +66,7 @@ defmodule ChatApp.Web do
       use Phoenix.Channel
 
       alias ChatApp.Repo
+      
       import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
       import ChatApp.Gettext

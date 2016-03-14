@@ -2,7 +2,8 @@ var React = require("react");
 var ReactDom = require("react-dom");
 
 import {Socket} from "phoenix";
-let socket = new Socket("/socket", {params: {token: window.userToken}});
+let socket = new Socket("/socket",
+                        {params: window.user_chatting_info});
 socket.connect();
 
 var MessageRow = React.createClass({
@@ -31,17 +32,13 @@ var MessageDisplay = React.createClass({
 
 var InputMessage = React.createClass({
   _pushMessage: function(){
-    var user = this.refs.user.value;
+
     var message = this.refs.message.value;
-    this.props.channel.push("new_message_event", {user: user, message: message});
+    this.props.channel.push("new_message_event", {message: message});
   },
   render: function(){
     return(
       <div id="input_message">
-        <div className="input-group">
-          <span className="input-group-addon">User</span>
-          <input ref="user"type="text" className="form-control" placeholder="username" aria-describedby="basic-addon1"></input>
-        </div>
         <div className="input-group">
           <span className="input-group-addon">Message</span>
           <input ref="message" type="text" className="form-control" placeholder="message" aria-describedby="basic-addon1"></input>

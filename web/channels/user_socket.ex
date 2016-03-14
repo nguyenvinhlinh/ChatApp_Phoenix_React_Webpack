@@ -1,6 +1,7 @@
 defmodule ChatApp.UserSocket do
   use Phoenix.Socket
-
+  alias ChatApp.Repo
+  alias ChatApp.User
   ## Channels
   channel "rooms:*", ChatApp.RoomChannel
   ## Transports
@@ -18,8 +19,18 @@ defmodule ChatApp.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(%{"username" => username, "chat_token" => chat_token}, socket) do
+    case Repo.get_by(User, username: username) do
+      nil ->
+        :error
+      user ->
+        if user.chat_token == chat_token do
+          socket = assign(socket, :current_user, user)
+          {:ok, socket}
+        else
+          :error
+        end
+    end
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
