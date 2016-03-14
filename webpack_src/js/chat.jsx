@@ -4,6 +4,7 @@ var ReactDom = require("react-dom");
 import {Socket} from "phoenix";
 let socket = new Socket("/socket", {params: {token: window.userToken}});
 socket.connect();
+
 var MessageRow = React.createClass({
   render: function(){
     return(
@@ -67,20 +68,81 @@ var ChatBox = React.createClass({
   },
   render: function(){
     return (
-      <div className="col-md-8 col-md-offset-2">
+      <div className="col-md-12">
         <MessageDisplay messages={this.state.messages}/>
         <InputMessage channel={this.props.channel}/>
       </div>
     );
   }
 });
+
+var UserStatusRow = React.createClass({
+  render: function(){
+    var style = {};
+    if(this.props.status == "online"){
+      style["color"] = "green";
+    } else {
+      style["color"] = "gray";
+    }
+    return (
+      <tr>
+        <td><span className="glyphicon glyphicon-user" aria-hidden="true" style={style}></span></td>
+        <td>{this.props.username}</td>
+      </tr>
+    );
+  }
+});
+
+var UserStatusTable = React.createClass({
+  _update_state_users: function(payload){
+    this.setState({
+      users: [/*sample here*/]
+    });
+  },
+  getInitialState: function(){
+    return {
+      users: [{
+        user_id: 1,
+        username: "Halo",
+        status: "online"
+      }, {
+        user_id: 2,
+        username: "Linh",
+        status: "busy"
+      }, {
+        user_id: 3,
+        username: "Admin",
+        status: "online"
+      }]
+    }
+  },
+  render: function(){
+    var rows = [];
+    for(var index in this.state.users){
+      rows.push(
+        <UserStatusRow username={this.state.users[index].username} status={this.state.users[index].status}   key={this.state.users[index].user_id}/>
+      );
+    }
+    return (
+      <table>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+});
+
+
+
 var channel =  socket.channel("rooms:lobby", {});
-var chatbox_react = ReactDom.render(<ChatBox channel={channel}/>, document.getElementById('chatbox-container'));
+var chatbox_centre = ReactDom.render(<ChatBox channel={channel}/>, document.getElementById('chatbox-container'));
+var chatbox_user_table = ReactDom.render(<UserStatusTable />, document.getElementById('chatbox-user-table'));
 
 channel.on("new_message_event",
            payload => {
-             chatbox_react.updateState(payload)
+             chatbox_centre.updateState(payload)
            });
+//channel.on("update_user_table",  );
+
 channel.join()
        .receive("ok", () => {console.log("Client joined the socket server")})
        .receive("error", () => {console.log("Client cannot join the socket server")});

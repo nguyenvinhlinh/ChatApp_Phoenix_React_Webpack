@@ -3,7 +3,6 @@ defmodule ChatApp.UserSocket do
 
   ## Channels
   channel "rooms:*", ChatApp.RoomChannel
-
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
   # transport :longpoll, Phoenix.Transports.LongPoll

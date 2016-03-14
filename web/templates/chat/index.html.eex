@@ -1,21 +1,30 @@
-<div class="row" style="padding: 10px;" id="chatbox-container">
-  <div id="chatbox" class="col-md-8 col-md-offset-2">
-    <div id="message-container">
-      <p><b>Linh:</b> Hello Son</p>
-      <p><b>Son:</b> Hello Linh</p>
-    </div>
-    <div id="input_message">
-      <div class="input-group">
-        <span class="input-group-addon">User</span>
-        <input type="text" class="form-control" placeholder="username" aria-describedby="basic-addon1">
-      </div>
-      <div class="input-group">
-        <span class="input-group-addon">Message</span>
-        <input type="text" class="form-control" placeholder="message" aria-describedby="basic-addon1">
-      </div>
+<div class="row">
+  <div class="col-md-1 col-md-offset-2" >
+    <table>
+      <tr>
+        <td>
+          <span class="glyphicon glyphicon-stats" style="color:green;" aria-hidden="true"></span>
+        </td>
+        <td>ChatRoom:1</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="glyphicon glyphicon-stats" style="color:red;" aria-hidden="true"></span>
+        </td>
+        <td>ChatRoom:2</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="glyphicon glyphicon-stats" style="color:blue;" aria-hidden="true"></span>
+        </td>
+        <td>ChatRoom:3</td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <div class="row" id="chatbox-container">
     </div>
   </div>
+  <div class="col-md-3" id="chatbox-user-table"></div>
 </div>
 <script src="<%= static_path(@conn, "/js/chat.js") %>"></script>
-
-<%= raw(ChatApp.ChatView.render_private_script()) %>
