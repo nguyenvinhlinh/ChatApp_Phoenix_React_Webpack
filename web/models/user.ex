@@ -1,6 +1,7 @@
 defmodule ChatApp.User do
   use ChatApp.Web, :model
   alias ChatApp.Utilities
+  alias ChatApp.GroupsUsers
   schema "users" do
     field :username, :string
     field :password, :string, virtual: true
@@ -8,6 +9,10 @@ defmodule ChatApp.User do
     field :remember_me_token, :string
     field :chat_token, :string
     timestamps
+
+    has_many(:groups_users, GroupsUsers,
+             foreign_key: :user_id,
+             references: :id)
   end
 
   @required_fields ["username", "password"]

@@ -18,7 +18,7 @@ defmodule ChatApp.SessionController do
         case Repo.update user do
           {:ok, model} ->
             user = model
-          {:error, changeset} ->
+          {:error, _changeset} ->
             conn = put_flash(conn, :error, "Cannot use remember me feature")
         end
         conn = conn

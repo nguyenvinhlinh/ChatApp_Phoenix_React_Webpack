@@ -76,10 +76,16 @@ var ChatBox = React.createClass({
 var UserStatusRow = React.createClass({
   render: function(){
     var style = {};
-    if(this.props.status == "online"){
-      style["color"] = "green";
-    } else {
-      style["color"] = "gray";
+    switch(this.props.status){
+      case "online":
+        style["color"] = "green";
+        break;
+      case "away":
+        style["color"] = "yellow";
+        break;
+      case "offline":
+        style["color"] = "grey";
+        break;
     }
     return (
       <tr>
@@ -105,11 +111,11 @@ var UserStatusTable = React.createClass({
       }, {
         user_id: 2,
         username: "Linh",
-        status: "busy"
+        status: "away"
       }, {
         user_id: 3,
         username: "Admin",
-        status: "online"
+        status: "offline"
       }]
     }
   },
