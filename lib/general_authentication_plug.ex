@@ -1,4 +1,4 @@
-defmodule ChatApp.AuthenticationPlug do
+defmodule ChatApp.GeneralAuthenticationPlug do
   import Plug.Conn
   alias ChatApp.Repo
   alias ChatApp.User
@@ -7,7 +7,6 @@ defmodule ChatApp.AuthenticationPlug do
   end
 
   def call(conn, _args) do
-    user_id = get_session(conn, :user_id)
     cond do
       get_session(conn, :user_id) != nil ->
         user = Repo.get(User, get_session(conn, :user_id))
@@ -21,6 +20,4 @@ defmodule ChatApp.AuthenticationPlug do
         conn
     end
   end
-
-
 end

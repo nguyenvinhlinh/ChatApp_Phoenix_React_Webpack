@@ -24,5 +24,4 @@ defmodule ChatApp.Utilities do
     |> Base.url_encode64
     |> binary_part(0, token_length)
   end
-
 end

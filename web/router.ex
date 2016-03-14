@@ -7,7 +7,7 @@ defmodule ChatApp.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug ChatApp.AuthenticationPlug
+    plug ChatApp.GeneralAuthenticationPlug
   end
 
   pipeline :api do

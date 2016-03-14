@@ -10,7 +10,7 @@ defmodule ChatApp.UserController do
   def create(conn, %{"user" => changeset}) do
     user = User.changeset(%User{}, changeset)
     case Repo.insert(user) do
-      {:ok, model} ->
+      {:ok, _model} ->
         conn
         |> put_flash(:info, "Created new user account.")
         |> redirect(to: page_path(conn, :index))
