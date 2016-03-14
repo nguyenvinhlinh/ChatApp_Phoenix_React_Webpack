@@ -1,12 +1,14 @@
 defmodule ChatApp.ChatView do
   use ChatApp.Web, :view
 
-  def render_private_script do
+  def render("user_chatting_info.js", %{username: username, chat_token: chat_token}) do
     """
     <script>
-    console.log("this is an extra script which is called from the ChatApp.ChatView");
+    window.user_chatting_info = {
+      username: "#{username}",
+      chat_token: "#{chat_token}"
+    };
     </script>
     """
   end
-
 end
