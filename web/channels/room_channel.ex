@@ -24,6 +24,7 @@ defmodule ChatApp.RoomChannel do
 
   def handle_in("user_change_status_event", %{"status" => status}, socket) do
     current_user = socket.assigns.current_user
+    socket = Phoenix.Socket.assign(socket, :status, status)
     start_link
     |> elem(1)
     |> query(["SET", "#{current_user.id}:#{current_user.username}", status])

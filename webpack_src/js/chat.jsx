@@ -1,6 +1,6 @@
 var React = require("react");
 var ReactDom = require("react-dom");
-
+var idleTimer = require("idle-timer");
 import {Socket} from "phoenix";
 let socket = new Socket("/socket",
                         {params: window.user_chatting_info});
@@ -164,3 +164,24 @@ channel.on("fetch_channel_users_status_event",
 channel.join()
        .receive("ok", () => {console.log("Client joined the socket server")})
        .receive("error", () => {console.log("Client cannot join the socket server")});
+
+
+idleTimer({
+  callback: idleFn,
+  idleTime: 5000
+});
+var user_idle = false;
+window.addEventListener("load", activeFn);
+document.addEventListener("mousemove", activeFn);
+document.addEventListener("scroll", activeFn);
+document.addEventListener("keypress", activeFn);
+function idleFn() {
+  channel.push("user_change_status_event", {status: "away"});
+  user_idle = true;
+}
+function activeFn() {
+  if(user_idle == true){
+    channel.push("user_change_status_event", {status: "online"});
+    user_idle = false;
+  }
+}
