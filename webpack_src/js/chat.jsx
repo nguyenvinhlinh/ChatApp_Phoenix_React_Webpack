@@ -32,9 +32,18 @@ var MessageDisplay = React.createClass({
 
 var InputMessage = React.createClass({
   _pushMessage: function(){
-
     var message = this.refs.message.value;
     this.props.channel.push("new_message_event", {message: message});
+  },
+  componentDidMount: function(){
+    var channel = this.props.channel;
+    this.refs.message.addEventListener("keypress", function(e){
+      var key = e.which || e.keyCode;
+      if(key === 13){
+        channel.push("new_message_event", {message: this.value});
+        this.value = "";
+      }
+    });
   },
   render: function(){
     return(
