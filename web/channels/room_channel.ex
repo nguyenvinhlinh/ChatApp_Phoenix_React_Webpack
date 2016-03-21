@@ -46,7 +46,32 @@ defmodule ChatApp.RoomChannel do
     {:noreply, socket}
   end
 
-  defp get_all_user_status do
+  def terminate(msg, socket) do
+    current_user = socket.assigns.current_user
+    update_redis = fn() ->
+      start_link
+      |> elem(1)
+      |> query(["SET", "#{current_user.id}:#{current_user.username}", "offline"])
+    end
+    broadcast_offline = fn() ->
+      broadcast_from!(socket,
+                      "single_user_status_change_event",
+                      %{"username" => current_user.username,
+                        "user_id" => current_user.id,
+                        "status" => "offline"})
+    end
+    case msg do
+      {:shutdown, :left} ->
+        update_redis.()
+        broadcast_offline.()
+      {:shutdown, :closed} ->
+        update_redis.()
+        broadcast_offline.()
+    end
+  end
+
+
+  defp get_all_user_status do  # NOT FINISHED
     {:ok, client} = start_link
     [cursor, redis_keys] = query(client, ["SCAN", 0])
     statuses = query(client, ["MGET" | redis_keys]) #=> ["online", "offline", "away"]
