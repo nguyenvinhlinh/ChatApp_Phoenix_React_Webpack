@@ -13,7 +13,7 @@ defmodule ChatApp.RoomChannel do
     {:ok, socket}
   end
 
-  def join("rooms:" <> r_id, _auth_message, socket) do
+  def join(_, _auth_message, socket) do
     {:error, %{reason: "invalid room"}}
   end
 

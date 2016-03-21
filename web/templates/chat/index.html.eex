@@ -1,29 +1,7 @@
 <div class="row">
-  <div class="col-md-1 col-md-offset-2" >
-    <table>
-      <tr>
-        <td>
-          <span class="glyphicon glyphicon-stats" style="color:green;" aria-hidden="true"></span>
-        </td>
-        <td>ChatRoom:1</td>
-      </tr>
-      <tr>
-        <td>
-          <span class="glyphicon glyphicon-stats" style="color:red;" aria-hidden="true"></span>
-        </td>
-        <td>ChatRoom:2</td>
-      </tr>
-      <tr>
-        <td>
-          <span class="glyphicon glyphicon-stats" style="color:blue;" aria-hidden="true"></span>
-        </td>
-        <td>ChatRoom:3</td>
-      </tr>
-    </table>
-  </div>
+  <div class="col-md-2 col-md-offset-1" id="chat_room_list_container"></div>
   <div class="col-md-6">
-    <div class="row" id="chatbox-container">
-    </div>
+    <div class="row" id="chatbox-container"></div>
   </div>
   <div class="col-md-3" id="chatbox-user-table"></div>
 </div>
