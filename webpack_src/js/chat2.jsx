@@ -181,8 +181,12 @@ var UserStatusTable = React.createClass({
 // ##############################
 var ChatRoomRow = React.createClass({
   render: function(){
+    var className = "";
+    if(this.props.roomid == this.props.current_room_id){
+      className = "active"
+    }
     return(
-      <li className="active" role="presentation" >
+      <li className={className} role="presentation" >
         <a href="#" data-roomid={this.props.roomid}
            key={this.props.roomid} onClick={this.props.onClickMessageRow.bind(null, this.props.roomid)} >
           {this.props.roomname}
@@ -207,7 +211,9 @@ var ChatRoomList = React.createClass({
     var rows = [];
     for(let index in this.props.rooms){
       rows.push(
-        <ChatRoomRow roomid={index} roomname={this.props.rooms[index]["roomname"]} key={index} onClickMessageRow={this.props.onClickMessageRow}/>
+        <ChatRoomRow roomid={index} roomname={this.props.rooms[index]["roomname"]}
+                     key={index} onClickMessageRow={this.props.onClickMessageRow}
+                     current_room_id={this.props.current_room_id} />
       );
     }
     return(
