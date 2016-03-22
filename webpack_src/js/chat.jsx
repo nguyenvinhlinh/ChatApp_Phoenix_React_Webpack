@@ -1,6 +1,6 @@
 var React = require("react");
 var ReactDom = require("react-dom");
-
+var idleTimer = require("idle-timer");
 import {Socket} from "phoenix";
 let socket = new Socket("/socket",
                         {params: window.user_chatting_info});
@@ -9,7 +9,7 @@ socket.connect();
 var MessageRow = React.createClass({
   render: function(){
     return(
-      <p><b>{this.props.user}:</b> {this.props.message}</p>
+      <p><b>{this.props.username}:</b> {this.props.message}</p>
     )
   }
 });
@@ -19,7 +19,7 @@ var MessageDisplay = React.createClass({
     var rows = [];
     for(var index in this.props.messages){
       rows.push(
-        <MessageRow user={this.props.messages[index].user} message={this.props.messages[index].message} key={index}/>
+        <MessageRow username={this.props.messages[index].username} message={this.props.messages[index].message} key={index}/>
       );
     }
     return(
@@ -32,9 +32,18 @@ var MessageDisplay = React.createClass({
 
 var InputMessage = React.createClass({
   _pushMessage: function(){
-
     var message = this.refs.message.value;
     this.props.channel.push("new_message_event", {message: message});
+  },
+  componentDidMount: function(){
+    var channel = this.props.channel;
+    this.refs.message.addEventListener("keypress", function(e){
+      var key = e.which || e.keyCode;
+      if(key === 13){
+        channel.push("new_message_event", {message: this.value});
+        this.value = "";
+      }
+    });
   },
   render: function(){
     return(
@@ -97,33 +106,41 @@ var UserStatusRow = React.createClass({
 });
 
 var UserStatusTable = React.createClass({
-  _update_state_users: function(payload){
+  update_state_single_user: function(payload){
+    var user = {
+      username: payload.username,
+      status: payload.status
+    }
+    this.state.users[payload.user_id] = user
     this.setState({
-      users: [/*sample here*/]
+      users: this.state.users
+    });
+  },
+  update_state_users: function(payload){ 
+    for(var key in payload){
+      this.state.users[key] = payload[key];
+    }
+    this.setState({
+      users: this.state.users
     });
   },
   getInitialState: function(){
     return {
-      users: [{
-        user_id: 1,
-        username: "Halo",
-        status: "online"
-      }, {
-        user_id: 2,
-        username: "Linh",
-        status: "away"
-      }, {
-        user_id: 3,
-        username: "Admin",
-        status: "offline"
-      }]
+      users: {
+        // 1: {username: "Halo",
+        //     status: "online"},
+        // 2: {username: "Linh",
+        //     status: "away"},
+        // 3: {username: "Admin",
+        //     status: "offline"}
+      }
     }
   },
   render: function(){
     var rows = [];
-    for(var index in this.state.users){
+    for(var key in this.state.users){
       rows.push(
-        <UserStatusRow username={this.state.users[index].username} status={this.state.users[index].status}   key={this.state.users[index].user_id}/>
+        <UserStatusRow username={this.state.users[key].username} status={this.state.users[key].status}   key={key}/>
       );
     }
     return (
@@ -144,8 +161,36 @@ channel.on("new_message_event",
            payload => {
              chatbox_centre.updateState(payload)
            });
-//channel.on("update_user_table",  );
+channel.on("single_user_status_change_event",
+           payload => {
+             chatbox_user_table.update_state_single_user(payload);
+           });
+channel.on("fetch_channel_users_status_event",
+           payload => {
+             chatbox_user_table.update_state_users(payload);
+           });
 
 channel.join()
        .receive("ok", () => {console.log("Client joined the socket server")})
        .receive("error", () => {console.log("Client cannot join the socket server")});
+
+
+idleTimer({
+  callback: idleFn,
+  idleTime: 5000
+});
+var user_idle = false;
+window.addEventListener("load", activeFn);
+document.addEventListener("mousemove", activeFn);
+document.addEventListener("scroll", activeFn);
+document.addEventListener("keypress", activeFn);
+function idleFn() {
+  channel.push("user_change_status_event", {status: "away"});
+  user_idle = true;
+}
+function activeFn() {
+  if(user_idle == true){
+    channel.push("user_change_status_event", {status: "online"});
+    user_idle = false;
+  }
+}
