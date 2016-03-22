@@ -1,10 +1,8 @@
-<div class="row">
+<div class="row" id="container">
   <div class="col-md-2 col-md-offset-1" id="chat_room_list_container"></div>
-  <div class="col-md-6">
-    <div class="row" id="chatbox-container"></div>
-  </div>
+  <div class="col-md-6" id="chatbox-container"></div>
   <div class="col-md-3" id="chatbox-user-table"></div>
 </div>
 
 <%= raw(render_existing(@view_module, "user_chatting_info.js", [conn: @conn]))%>
-<script src="<%= static_path(@conn, "/js/chat.js") %>"></script>
+<script src="<%= static_path(@conn, "/js/chat2.js") %>"></script>

@@ -3,7 +3,8 @@ module.exports = {
   context: path.join(__dirname, "webpack_src"),
   entry: {
     app: "./js/app.js",
-    chat: "./js/chat.jsx"
+    chat: "./js/chat.jsx",
+    chat2: "./js/chat2.jsx"
   },
   output: {
     path: path.join(__dirname, "priv/static/js"),
