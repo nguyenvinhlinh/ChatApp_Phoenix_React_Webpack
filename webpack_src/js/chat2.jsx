@@ -347,3 +347,23 @@ room_lobby_channel.join()
 room_lobby2_channel.join()
                     .receive("ok", () => {console.log("Client joined the socket server")})
                     .receive("error", () => {console.log("Client cannot join the socket server")});
+
+idleTimer({
+  callback: idleFn,
+  idleTime: 5000
+});
+var user_idle = false;
+window.addEventListener("load", activeFn);
+document.addEventListener("mousemove", activeFn);
+document.addEventListener("scroll", activeFn);
+document.addEventListener("keypress", activeFn);
+function idleFn() {
+  room_lobby_channel.push("user_change_status_event", {status: "away"});
+  user_idle = true;
+}
+function activeFn() {
+  if(user_idle == true){
+    room_lobby_channel.push("user_change_status_event", {status: "online"});
+    user_idle = false;
+  }
+}
