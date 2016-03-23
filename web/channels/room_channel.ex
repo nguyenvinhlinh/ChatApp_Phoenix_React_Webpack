@@ -2,7 +2,7 @@ defmodule ChatApp.RoomChannel do
   use Phoenix.Channel
   import Exredis
 
-  def join("rooms:lobby", _auth_message, socket) do
+  def join("rooms:lobby"<>id, _auth_message, socket) do
     current_user = socket.assigns.current_user
     socket = Phoenix.Socket.assign(socket, :status, "online")
     start_link
@@ -18,6 +18,8 @@ defmodule ChatApp.RoomChannel do
   end
 
   def handle_in("new_message_event", %{"message" => message}, socket) do
+    IO.inspect "DEBUG #{__ENV__.file} @#{__ENV__.line}"
+    IO.inspect "END"
     broadcast(socket, "new_message_event", %{"username" => socket.assigns.current_user.username, "message" => message})
     {:noreply, socket}
   end

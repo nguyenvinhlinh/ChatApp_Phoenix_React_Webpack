@@ -237,6 +237,7 @@ var ChatRoomList = React.createClass({
 // #                                #
 // ##################################
 var ChatAppContainer = React.createClass({
+  
   getInitialState: function(){
     return({
       messages: {
@@ -280,10 +281,12 @@ var ChatAppContainer = React.createClass({
     });
   },
   render: function(){
+    var current_room_id = this.state.current_room_id;
     return(
       <div>
         <ChatRoomList rooms={this.props.rooms} current_room_id={this.state.current_room_id} onClickMessageRow={this.onClickMessageRow}/>
-        <ChatBox rooms={this.props.rooms} current_room_id={this.state.current_room_id} messages={this.state.messages}/>
+        <ChatBox rooms={this.props.rooms} current_room_id={this.state.current_room_id}
+                 messages={this.state.messages} channel={this.props.rooms[current_room_id]["channel"]}/>
         <UserStatusTable users={this.state.users}/>
       </div>
     )
@@ -301,3 +304,10 @@ var rooms = {
 
 var chat_container = ReactDom.render(<ChatAppContainer rooms={rooms}/>, document.getElementById("container"));
 
+rooms_lobby_channel.join()
+       .receive("ok", () => {console.log("Client joined the socket server")})
+                     .receive("error", () => {console.log("Client cannot join the socket server")});
+
+rooms_lobby2_channel.join()
+       .receive("ok", () => {console.log("Client joined the socket server")})
+       .receive("error", () => {console.log("Client cannot join the socket server")});
