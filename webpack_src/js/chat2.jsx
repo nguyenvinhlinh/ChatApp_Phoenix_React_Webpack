@@ -145,23 +145,11 @@ var UserStatusTable = React.createClass({
       users: this.state.users
     });
   },
-  getInitialState: function(){
-    return {
-      users: {
-        1: {username: "Halo",
-            status: "online"},
-        2: {username: "Linh",
-            status: "away"},
-        3: {username: "Admin",
-            status: "offline"}
-      }
-    }
-  },
   render: function(){
     var rows = [];
-    for(var key in this.state.users){
+    for(var key in this.props.users){
       rows.push(
-        <UserStatusRow username={this.state.users[key].username} status={this.state.users[key].status} key={key}/>
+        <UserStatusRow username={this.props.users[key].username} status={this.props.users[key].status} key={key}/>
       );
     }
     return (
@@ -188,7 +176,7 @@ var ChatRoomRow = React.createClass({
     return(
       <li className={className} role="presentation" >
         <a href="#" data-roomid={this.props.roomid}
-           key={this.props.roomid} onClick={this.props.onClickMessageRow.bind(null, this.props.roomid)} >
+           key={this.props.roomid} onClick={this.props.onClickChatRoomRow.bind(null, this.props.roomid)} >
           {this.props.roomname}
         </a>
       </li>
@@ -212,7 +200,7 @@ var ChatRoomList = React.createClass({
     for(let index in this.props.rooms){
       rows.push(
         <ChatRoomRow roomid={index} roomname={this.props.rooms[index]["roomname"]}
-                     key={index} onClickMessageRow={this.props.onClickMessageRow}
+                     key={index} onClickChatRoomRow={this.props.onClickChatRoomRow}
                      current_room_id={this.props.current_room_id} />
       );
     }
@@ -275,16 +263,32 @@ var ChatAppContainer = React.createClass({
       }
     )
   },
-  onClickMessageRow: function(chatroomrow_id){
+  onClickChatRoomRow: function(chatroomrow_id){
     this.setState({
       current_room_id: chatroomrow_id
+    });
+  },
+  updateStateMessage: function(room_id, payload){
+    this.state.messages[room_id].push(payload);
+    this.setState({
+      messages: this.state.messages
+    });
+  },
+  updateStateUserStatus: function(room_id, payload){
+    var user = {
+      username: payload.username,
+      status: payload.status
+    }
+    this.state.users[payload.user_id] = user
+    this.setState({
+      users: this.state.users
     });
   },
   render: function(){
     var current_room_id = this.state.current_room_id;
     return(
       <div>
-        <ChatRoomList rooms={this.props.rooms} current_room_id={this.state.current_room_id} onClickMessageRow={this.onClickMessageRow}/>
+        <ChatRoomList rooms={this.props.rooms} current_room_id={this.state.current_room_id} onClickChatRoomRow={this.onClickChatRoomRow}/>
         <ChatBox rooms={this.props.rooms} current_room_id={this.state.current_room_id}
                  messages={this.state.messages} channel={this.props.rooms[current_room_id]["channel"]}/>
         <UserStatusTable users={this.state.users}/>
@@ -293,21 +297,38 @@ var ChatAppContainer = React.createClass({
   }
 });
 // The and of container
-var rooms_lobby_channel =  socket.channel("rooms:lobby", {});
-var rooms_lobby2_channel =  socket.channel("rooms:lobby2", {});
+var room_lobby_channel =  socket.channel("rooms:lobby", {});
+var room_lobby2_channel =  socket.channel("rooms:lobby2", {});
 var rooms = {
   1: {roomname: "room:lobby1",
-      channel: rooms_lobby_channel},
+      channel: room_lobby_channel},
   2: {roomname: "room:lobby2",
-      channel: rooms_lobby2_channel}
+      channel: room_lobby2_channel}
 };
-
 var chat_container = ReactDom.render(<ChatAppContainer rooms={rooms}/>, document.getElementById("container"));
+// Handling the return event from server
+room_lobby_channel.on("new_message_event", payload => {
+  chat_container.updateStateMessage(1, payload);
+});
+room_lobby2_channel.on("new_message_event", payload => {
+  chat_container.updateStateMessage(2, payload);
+});
+room_lobby_channel.on("single_user_status_change_event",
+           payload => {
+             chat_container.updateStateUserStatus(1, payload);
+           });
+room_lobby2_channel.on("single_user_status_change_event",
+           payload => {
+             chat_container.updateStateUserStatus(2, payload);
+           });
 
-rooms_lobby_channel.join()
-       .receive("ok", () => {console.log("Client joined the socket server")})
-                     .receive("error", () => {console.log("Client cannot join the socket server")});
+// End of events handling
 
-rooms_lobby2_channel.join()
-       .receive("ok", () => {console.log("Client joined the socket server")})
-       .receive("error", () => {console.log("Client cannot join the socket server")});
+
+room_lobby_channel.join()
+                  .receive("ok", () => {console.log("Client joined the socket server")})
+                  .receive("error", () => {console.log("Client cannot join the socket server")});
+
+room_lobby2_channel.join()
+                   .receive("ok", () => {console.log("Client joined the socket server")})
+                   .receive("error", () => {console.log("Client cannot join the socket server")});
