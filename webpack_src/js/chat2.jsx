@@ -289,6 +289,14 @@ var ChatAppContainer = React.createClass({
       users: this.state.users
     });
   },
+  insertStateUserStatus: function(room_id, payload){
+    for(var key in payload){
+      this.state.users[key] = payload[key];
+    }
+    this.setState({
+      users: this.state.users
+    });
+  },
   render: function(){
     var current_room_id = this.state.current_room_id;
     return(
@@ -326,9 +334,11 @@ room_lobby2_channel.on("single_user_status_change_event",
            payload => {
              chat_container.updateStateUserStatus(2, payload);
            });
-
+room_lobby2_channel.on("fetch_channel_users_status_event",
+           payload => {
+             chat_container.insertStateUserStatus(1, payload);
+           });
 // End of events handling
-
 
 room_lobby_channel.join()
                   .receive("ok", () => {console.log("Client joined the socket server")})
