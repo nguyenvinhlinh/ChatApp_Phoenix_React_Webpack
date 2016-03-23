@@ -50,14 +50,15 @@ var InputMessage = React.createClass({
   _pushMessage: function(){
     var message = this.refs.message.value;
     this.props.channel.push("new_message_event", {message: message});
+    this.refs.message.value = "";
   },
   componentDidMount: function(){
     var channel = this.props.channel;
+    var pushMessageFn = this._pushMessage;
     this.refs.message.addEventListener("keypress", function(e){
       var key = e.which || e.keyCode;
       if(key === 13 && this.value != ""){
-        channel.push("new_message_event", {message: this.value});
-        this.value = "";
+        pushMessageFn();
       }
     });
   },
@@ -229,26 +230,26 @@ var ChatAppContainer = React.createClass({
   getInitialState: function(){
     return({
       messages: {
-        1: [
-          {username: "nguyenvinhlinh",
-           message: "Hello world"},
-          {username: "admin",
-           message: "Hi"}
-        ],
-        2: [
-          {username: "nguyenvinhlinh",
-           message: "Hello world, room2"},
-          {username: "admin",
-           message: "Hi room2"}
-        ]
+        // 1: [
+        //   {username: "nguyenvinhlinh",
+        //    message: "Hello world"},
+        //   {username: "admin",
+        //    message: "Hi"}
+        // ],
+        // 2: [
+        //   {username: "nguyenvinhlinh",
+        //    message: "Hello world, room2"},
+        //   {username: "admin",
+        //    message: "Hi room2"}
+        // ]
       },
       users: {
-        1: {username: "Halo",
-             status: "online"},
-        2: {username: "Linh",
-            status: "away"},
-        3: {username: "Admin",
-             status: "offline"}
+        // 1: {username: "Halo",
+        //      status: "online"},
+        // 2: {username: "Linh",
+        //     status: "away"},
+        // 3: {username: "Admin",
+        //      status: "offline"}
       },
       current_room_id: 1
     })
@@ -269,7 +270,11 @@ var ChatAppContainer = React.createClass({
     });
   },
   updateStateMessage: function(room_id, payload){
-    this.state.messages[room_id].push(payload);
+    if(this.state.messages[room_id] == null){
+      this.state.messages[room_id] = [payload];
+    } else {
+      this.state.messages[room_id].push(payload);
+    }
     this.setState({
       messages: this.state.messages
     });
@@ -330,5 +335,5 @@ room_lobby_channel.join()
                   .receive("error", () => {console.log("Client cannot join the socket server")});
 
 room_lobby2_channel.join()
-                   .receive("ok", () => {console.log("Client joined the socket server")})
-                   .receive("error", () => {console.log("Client cannot join the socket server")});
+                    .receive("ok", () => {console.log("Client joined the socket server")})
+                    .receive("error", () => {console.log("Client cannot join the socket server")});
