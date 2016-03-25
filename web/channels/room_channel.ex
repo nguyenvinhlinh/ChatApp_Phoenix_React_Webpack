@@ -18,8 +18,6 @@ defmodule ChatApp.RoomChannel do
   end
 
   def handle_in("new_message_event", %{"message" => message}, socket) do
-    IO.inspect "DEBUG #{__ENV__.file} @#{__ENV__.line}"
-    IO.inspect "END"
     broadcast(socket, "new_message_event", %{"username" => socket.assigns.current_user.username, "message" => message})
     {:noreply, socket}
   end
