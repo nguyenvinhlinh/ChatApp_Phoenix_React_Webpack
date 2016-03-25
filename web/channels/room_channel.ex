@@ -2,7 +2,7 @@ defmodule ChatApp.RoomChannel do
   use Phoenix.Channel
   import Exredis
 
-  def join("rooms:lobby", _auth_message, socket) do
+  def join("rooms:lobby"<>id, _auth_message, socket) do
     current_user = socket.assigns.current_user
     socket = Phoenix.Socket.assign(socket, :status, "online")
     start_link
@@ -13,7 +13,7 @@ defmodule ChatApp.RoomChannel do
     {:ok, socket}
   end
 
-  def join("rooms:" <> r_id, _auth_message, socket) do
+  def join(_, _auth_message, socket) do
     {:error, %{reason: "invalid room"}}
   end
 

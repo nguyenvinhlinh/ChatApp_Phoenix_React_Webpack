@@ -5,7 +5,23 @@ import {Socket} from "phoenix";
 let socket = new Socket("/socket",
                         {params: window.user_chatting_info});
 socket.connect();
-
+/// The beginning of ChatBox
+//  #########################
+//  # ChatBox               #
+//  #  #RoomHeader#         # 
+//  #  #MessageDisplay      #
+//  #   #MessageRow         #
+//  #  #InputMessage        #
+//  #########################
+var RoomHeader = React.createClass({
+  render: function(){
+    return(
+      <p>
+        <span className="label label-success">{this.props.roomname}</span>
+      </p>
+    )
+  }
+});
 var MessageRow = React.createClass({
   render: function(){
     return(
@@ -39,7 +55,7 @@ var InputMessage = React.createClass({
     var channel = this.props.channel;
     this.refs.message.addEventListener("keypress", function(e){
       var key = e.which || e.keyCode;
-      if(key === 13){
+      if(key === 13 && this.value != ""){
         channel.push("new_message_event", {message: this.value});
         this.value = "";
       }
@@ -69,18 +85,28 @@ var ChatBox = React.createClass({
   },
   getInitialState: function(){
     return {
-      messages: []
+      messages: [],
+      roomname: "lobby:room1"
     }
   },
   render: function(){
     return (
       <div className="col-md-12">
+        <RoomHeader roomname={this.state.roomname} />
         <MessageDisplay messages={this.state.messages}/>
         <InputMessage channel={this.props.channel}/>
       </div>
     );
   }
 });
+// The end of ChatBox
+
+// The Beginning of UserStatusTable
+//  ###########################
+//  # UserStatusTable         #
+//  #  #UserStatusRow         #
+//  #  #UserStatusRow         #
+//  ###########################
 
 var UserStatusRow = React.createClass({
   render: function(){
@@ -150,13 +176,53 @@ var UserStatusTable = React.createClass({
     );
   }
 });
+// The end of UserStatusTable
 
+// The beginning of ChatRoomList
+// ##############################
+// # ChatRoomList               #
+// #  #ChatRoomRow              #
+// #  #ChatRoomRow              #
+// ##############################
+var ChatRoomRow = React.createClass({
+  render: function(){
+    return(
+      <li className="active" role="presentation" >
+        <a href="#" data-roomid={this.props.roomid}>{this.props.roomname}</a>
+      </li>
+    )
+  }
+});
 
+var ChatRoomList = React.createClass({
+  getInitialState: function(){
+    return {
+      rooms: {
+        1: "room:lobby1",
+        2: "room:lobby2"
+      }
+    }
+  },
+  render: function(){
+    var rows = [];
+    for(let index in this.state.rooms){
+      rows.push(
+        <ChatRoomRow roomid={index} roomname={this.state.rooms[index]} key={index}/>
+      );
+    }
+    return(
+      <ul className="nav nav-pills nav-stacked">
+       {rows}
+      </ul>
+    )
+  }
+});
+// The end of ChatRoomTable
 
 var channel =  socket.channel("rooms:lobby", {});
 var chatbox_centre = ReactDom.render(<ChatBox channel={channel}/>, document.getElementById('chatbox-container'));
 var chatbox_user_table = ReactDom.render(<UserStatusTable />, document.getElementById('chatbox-user-table'));
-
+var chatroom_list = ReactDom.render(<ChatRoomList />, document.getElementById('chat_room_list_container'));
 channel.on("new_message_event",
            payload => {
              chatbox_centre.updateState(payload)
