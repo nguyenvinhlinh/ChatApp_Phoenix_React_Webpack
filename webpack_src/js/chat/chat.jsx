@@ -1,9 +1,10 @@
 var React = require("react");
 var ReactDom = require("react-dom");
 var idleTimer = require("idle-timer");
+import {ChatAppActions} from "./actions/ChatAppActions.js";
 import {Socket} from "phoenix";
 
-import {ChatAppContainer} from "./components/chat_app_container.js";
+import {ChatAppContainer} from "./components/chat_app_container.jsx";
 let socket = new Socket("/socket", {params: window.user_chatting_info});
 socket.connect();
 var room_lobby_channel =  socket.channel("rooms:lobby", {});
@@ -17,18 +18,18 @@ var rooms = {
 var chat_container = ReactDom.render(<ChatAppContainer rooms={rooms}/>, document.getElementById("container"));
 // Handling the return event from server
 room_lobby_channel.on("new_message_event", payload => {
-  chat_container.updateStateMessage(1, payload);
+  ChatAppActions.update_state_message(1, payload);
 });
 room_lobby2_channel.on("new_message_event", payload => {
-  chat_container.updateStateMessage(2, payload);
+  ChatAppActions.update_state_message(2, payload);
 });
 room_lobby_channel.on("user_status_change_event",
                       payload => {
-                        chat_container.insertStateUserStatus(1, payload);
+                        ChatAppActions.update_state_user_status(1, payload);
                       });
 room_lobby2_channel.on("user_status_change_event",
                        payload => {
-                         chat_container.insertStateUserStatus(2, payload);
+                         ChatAppActions.update_state_user_status(2, payload);
                        });
 // End of events handling
 room_lobby_channel.join()

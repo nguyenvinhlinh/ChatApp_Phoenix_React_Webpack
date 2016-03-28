@@ -17,9 +17,9 @@ var ChatAppActions = {
       payload: payload
     });
   },
-  insert_state_user_status: function(room_id, payload){
+  update_state_user_status: function(room_id, payload){
     ChatAppDispatcher.dispatch({
-      
+      actionType: ChatAppConstants.ChatApp_update_state_user_status,
       room_id: room_id,
       payload: payload
     });
