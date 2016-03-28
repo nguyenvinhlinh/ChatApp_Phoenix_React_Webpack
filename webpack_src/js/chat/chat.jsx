@@ -22,18 +22,14 @@ room_lobby_channel.on("new_message_event", payload => {
 room_lobby2_channel.on("new_message_event", payload => {
   chat_container.updateStateMessage(2, payload);
 });
-room_lobby_channel.on("single_user_status_change_event",
-           payload => {
-             chat_container.updateStateUserStatus(1, payload);
-           });
-room_lobby2_channel.on("single_user_status_change_event",
-           payload => {
-             chat_container.updateStateUserStatus(2, payload);
-           });
-room_lobby2_channel.on("fetch_channel_users_status_event",
-           payload => {
-             chat_container.insertStateUserStatus(1, payload);
-           });
+room_lobby_channel.on("user_status_change_event",
+                      payload => {
+                        chat_container.insertStateUserStatus(1, payload);
+                      });
+room_lobby2_channel.on("user_status_change_event",
+                       payload => {
+                         chat_container.insertStateUserStatus(2, payload);
+                       });
 // End of events handling
 room_lobby_channel.join()
                   .receive("ok", () => {console.log("Client joined the socket server")})
