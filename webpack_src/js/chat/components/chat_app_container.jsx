@@ -4,6 +4,9 @@ import {ChatBox} from "./chatbox.jsx";
 import {UserStatusTable} from "./user_status_table.jsx";
 import {ChatAppStore} from "../stores/ChatAppStore.jsx";
 var ChatAppContainer = React.createClass({
+  _updateState: function(){
+    this.setState(ChatAppStore.get_current_state());
+  },
   getInitialState: function(){
     return(ChatAppStore.get_current_state());
   },
@@ -18,6 +21,12 @@ var ChatAppContainer = React.createClass({
         }
       }
     )
+  },
+  componentDidMount: function(){
+    ChatAppStore.addChangeListener(this._updateState);
+  },
+  componentWillUnmont: function(){
+    ChatAppStore.removeChangeListener(this._updateState);
   },
   onClickChatRoomRow: function(chatroomrow_id){
     this.setState({

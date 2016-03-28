@@ -62,7 +62,27 @@ var ChatAppStore = assign({}, EventEmitter.prototype, {
 });
 
 ChatAppDispatcher.register(function(action){
-  console.log(action);
+  switch(action.actionType){
+    case ChatAppConstants.ChatApp_click_on_chat_row:
+      ChatAppState.current_room_id = action.room_id;
+      ChatAppStore.emitChange();
+      break;
+    case ChatAppConstants.ChatApp_update_state_message:
+      if(ChatAppState.messages[action.room_id] == null){
+        ChatAppState.messages[action.room_id] = [action.payload];
+      } else {
+        ChatAppState.messages[action.room_id].push(action.payload);
+      }
+      ChatAppStore.emitChange();
+      break;
+    case ChatAppConstants.ChatApp_update_state_user_status:
+      for(var key in action.payload){
+        ChatAppState.users[key] = action.payload[key];
+      }
+      ChatAppStore.emitChange();
+      break;
+    default:
+      break;
+  }
 });
-
 export {ChatAppStore};
