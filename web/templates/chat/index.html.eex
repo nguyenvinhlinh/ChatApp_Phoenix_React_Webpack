@@ -5,4 +5,4 @@
 </div>
 
 <%= raw(render_existing(@view_module, "user_chatting_info.js", [conn: @conn]))%>
-<script src="<%= static_path(@conn, "/js/chat2.js") %>"></script>
+<script src="<%= static_path(@conn, "/js/chat3.js") %>"></script>

@@ -4,7 +4,8 @@ module.exports = {
   entry: {
     app: "./js/app.js",
     chat: "./js/chat.jsx",
-    chat2: "./js/chat2.jsx"
+    chat2: "./js/chat2.jsx",
+    chat3: "./js/chat/chat.jsx"
   },
   output: {
     path: path.join(__dirname, "priv/static/js"),

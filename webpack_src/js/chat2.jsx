@@ -226,7 +226,7 @@ var ChatRoomList = React.createClass({
 // #                                #
 // ##################################
 var ChatAppContainer = React.createClass({
-  
+    
   getInitialState: function(){
     return({
       messages: {
