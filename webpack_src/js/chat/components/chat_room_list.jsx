@@ -15,7 +15,7 @@ var ChatRoomRow = React.createClass({
     return(
       <li className={className} role="presentation" >
         <a href="#" data-roomid={this.props.roomid}
-           key={this.props.roomid} onClick={ChatAppActions.click_on_chat_row.bind(this.props.roomid)} >
+           key={this.props.roomid} onClick={ChatAppActions.click_on_chat_row.bind(null, this.props.roomid)} >
           {this.props.roomname}
         </a>
       </li>
