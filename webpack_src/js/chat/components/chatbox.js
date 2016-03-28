@@ -1,4 +1,5 @@
 var React = require("react");
+import {ChatAppActions} from "../actions/ChatAppActions.js";
 /// The beginning of ChatBox
 //  #########################
 //  # ChatBox               #
@@ -43,7 +44,7 @@ var MessageDisplay = React.createClass({
 var InputMessage = React.createClass({
   _pushMessage: function(){
     var message = this.refs.message.value;
-    this.props.channel.push("new_message_event", {message: message});
+    ChatAppActions.post_message(this.props.channel, message);
     this.refs.message.value = "";
   },
   componentDidMount: function(){
