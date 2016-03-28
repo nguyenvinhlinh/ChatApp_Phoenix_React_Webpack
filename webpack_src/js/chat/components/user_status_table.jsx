@@ -29,24 +29,6 @@ var UserStatusRow = React.createClass({
 });
 
 var UserStatusTable = React.createClass({
-  update_state_single_user: function(payload){
-    var user = {
-      username: payload.username,
-      status: payload.status
-    }
-    this.state.users[payload.user_id] = user
-    this.setState({
-      users: this.state.users
-    });
-  },
-  update_state_users: function(payload){ 
-    for(var key in payload){
-      this.state.users[key] = payload[key];
-    }
-    this.setState({
-      users: this.state.users
-    });
-  },
   render: function(){
     var rows = [];
     for(var key in this.props.users){

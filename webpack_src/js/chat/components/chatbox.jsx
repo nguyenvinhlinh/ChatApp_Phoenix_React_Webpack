@@ -73,12 +73,6 @@ var InputMessage = React.createClass({
 });
 
 var ChatBox = React.createClass({
-  getInitialState: function(){
-    return {
-      messages: [],
-      roomname: "lobby:room1"
-    }
-  },
   render: function(){
     var current_room_id = this.props.current_room_id;
     return (

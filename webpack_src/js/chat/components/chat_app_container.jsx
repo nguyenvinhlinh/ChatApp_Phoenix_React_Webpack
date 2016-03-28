@@ -33,24 +33,6 @@ var ChatAppContainer = React.createClass({
       current_room_id: chatroomrow_id
     });
   },
-  updateStateMessage: function(room_id, payload){
-    if(this.state.messages[room_id] == null){
-      this.state.messages[room_id] = [payload];
-    } else {
-      this.state.messages[room_id].push(payload);
-    }
-    this.setState({
-      messages: this.state.messages
-    });
-  },
-  insertStateUserStatus: function(room_id, payload){
-    for(var key in payload){
-      this.state.users[key] = payload[key];
-    }
-    this.setState({
-      users: this.state.users
-    });
-  },
   render: function(){
     var current_room_id = this.state.current_room_id;
     return(

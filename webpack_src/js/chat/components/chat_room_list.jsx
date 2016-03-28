@@ -40,8 +40,7 @@ var ChatRoomList = React.createClass({
     for(let index in this.props.rooms){
       rows.push(
         <ChatRoomRow roomid={index} roomname={this.props.rooms[index]["roomname"]}
-                     key={index} onClickChatRoomRow={this.props.onClickChatRoomRow}
-                     current_room_id={this.props.current_room_id} />
+                     key={index} current_room_id={this.props.current_room_id} />
       );
     }
     return(
