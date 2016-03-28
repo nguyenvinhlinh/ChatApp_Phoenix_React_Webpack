@@ -18,7 +18,8 @@ defmodule ChatApp.RoomChannel do
   end
 
   def handle_in("new_message_event", %{"message" => message}, socket) do
-    broadcast(socket, "new_message_event", %{"username" => socket.assigns.current_user.username, "message" => message})
+    broadcast(socket, "new_message_event",
+              %{"username" => socket.assigns.current_user.username, "message" => message})
     {:noreply, socket}
   end
 
@@ -34,15 +35,19 @@ defmodule ChatApp.RoomChannel do
 
   def handle_info(:broadcast_current_user_status, socket) do
     user = socket.assigns.current_user
-    broadcast(socket, "single_user_status_change_event", %{"username" => user.username,
-                                                     "user_id" => user.id,
-                                                     "status" => socket.assigns.status})
+    broadcast(socket,
+              "user_status_change_event",
+              %{
+                Integer.to_string(user.id) => %{"username" => user.username,
+                                                "status" => socket.assigns.status
+                                               }
+              })
     {:noreply, socket}
   end
 
   def handle_info(:send_channel_users_status, socket) do
     users = get_all_user_status
-    push(socket, "fetch_channel_users_status_event", users)
+    push(socket, "user_status_change_event", users)
     {:noreply, socket}
   end
 
@@ -55,10 +60,11 @@ defmodule ChatApp.RoomChannel do
     end
     broadcast_offline = fn() ->
       broadcast_from!(socket,
-                      "single_user_status_change_event",
-                      %{"username" => current_user.username,
-                        "user_id" => current_user.id,
-                        "status" => "offline"})
+                      "user_status_change_event",
+                      %{
+                        Integer.to_string(current_user.id) => %{"username" => current_user.username,
+                                                                "status" => "offline"}
+                      })
     end
     case msg do
       {:shutdown, :left} ->
